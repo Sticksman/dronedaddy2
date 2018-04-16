@@ -1,0 +1,8 @@
+like character mood increase: increase mood 10
+like character mood increase: increase source relationship 10
+love character mood increase: increase mood 20
+love character mood increase: increase source relationship 20
+dislike character mood decrease: increase mood 10
+dislike character mood decrease: increase source relationship 10
+hate character mood decrease: increase mood 20
+hate character mood decrease: increase source relationship 20

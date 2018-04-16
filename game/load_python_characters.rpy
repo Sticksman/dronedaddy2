@@ -68,6 +68,7 @@ init python:
         def __init__(self, name, **kwargs):
             self.name = name
             self.relationships = []
+            self.renpy_char = None
             # This does magic, we define our list of attributes above, then we take a list of arguments by name
             # We use the list of attributes to pull the ones we want from the arguments
             # Then we validate it via validate
@@ -134,6 +135,9 @@ init python:
                 d[key] = value['%s' % key]
 
             return d
+
+        def set_renpy_char(self, char):
+            self.renpy_char = char
 
 
     class Relationship(object):
@@ -241,4 +245,5 @@ init python:
             return value
 
 
-
+    class Trigger(object):
+        pass
