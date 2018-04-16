@@ -1,0 +1,16 @@
+{
+  "display_name": "Test Character",
+  "description": "A test character",
+  "sex": 0,
+  "gender": 0,
+  "orientation": 0,
+  "gender_sex_relationship": 0,
+  "emotional_state": 0,
+  "relationship_thresholds": {
+    "-2": -75,
+    "-1": 50,
+    "0": 0,
+    "1": 25,
+    "2": 90
+  }
+}

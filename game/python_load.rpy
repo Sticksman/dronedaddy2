@@ -5,7 +5,7 @@ init python:
     open_file = renpy.file
 
     class MOOD(object):
-        moods = ANGRY, DISSATISFIED, NEUTRAL, SATISFIED, HAPPY = range(-2, 2)
+        moods = ANGRY, DISSATISFIED, NEUTRAL, SATISFIED, HAPPY = range(-2, 3)
 
     class GENDER(object):
         identities = [MALE, FEMALE, FLUID, QUEER, OTHER] = range(5)
@@ -17,10 +17,10 @@ init python:
         orientations = [STRAIGHT, GAY, BI, ASEXUAL, OTHER] = range(5)
 
     class GENDER_SEX_RELATIONSHIP:
-        relationships = [CIS, TRANS, OTHER] = range(2)
+        relationships = [CIS, TRANS, OTHER] = range(3)
 
     class R_STATE(object):
-        states = [HATE, DISLIKE, NEUTRAL, LIKE, LOVE] = range(-2, 2)
+        states = [HATE, DISLIKE, NEUTRAL, LIKE, LOVE] = range(-2, 3)
 
     # Do we need this?
     class MODIFIER(object):
@@ -42,14 +42,14 @@ init python:
 
         @staticmethod
         def init_hand_crafted_character(name, data_file_root, character_names):
-            c = Character.init_character_from_file(name, data_file_root)
+            c = DDCharacter.init_character_from_file(name, data_file_root)
             relationships = Relationship.init_hand_crafted_relationship(name, data_file_root, character_names)
             c.relationships = relationships
             return c
 
         @staticmethod
         def load_state_from_file(name, data_file_root, attrs):
-            data_file_path = os.path.join(root, name, 'character.json')
+            data_file_path = os.path.join(data_file_root, name, 'character.json')
 
             serialized_state = {}
             with open_file(data_file_path) as f:
@@ -123,15 +123,17 @@ init python:
             return GENDER_SEX_RELATIONSHIP.OTHER
 
         def validate_relationship_thresholds(self, value):
-            if not isinstance(value, dict) or len(value) < len(R_STATE.states):
+            if len(value.keys()) < len(R_STATE.states):
                 raise AttributeError("Relationship thresholds must be defined")
 
-            for key in R_STATE.states():
-                if key not in value:
+            d = {}
+            for key in R_STATE.states:
+                if "%s" % key not in value:
                     raise AttributeError("Relationship thresholds are malformed. Make sure you've defined all of them.")
+                # Transform into numbers
+                d[key] = value['%s' % key]
 
-            return value
-
+            return d
 
 
     class Relationship(object):
@@ -160,7 +162,7 @@ init python:
             return ships
 
         @staticmethod
-        def init_blank_relationships(name, character_names);
+        def init_blank_relationships(name, character_names):
             ships = []
             for c_name in character_names:
                 if name == c_name:
@@ -171,13 +173,13 @@ init python:
             return ships
 
         # Factor this method at some point
-        @staticmethod
+        @classmethod
         def load_state_from_file(cls, name, other_character_name, data_file_root, attrs):
             file_name = '%s_%s.json' % (name, other_character_name)
             file_path = os.path.join(data_file_root, 'relationships', file_name)
 
             serialized_state = {}
-            with open_file(data_file_path) as f:
+            with open_file(file_path) as f:
                 serialized_state = json.loads(f.read())
 
             state = {}
@@ -237,4 +239,6 @@ init python:
             if value not in MODIFIER.modifiers:
                 return MODIFIER.NEUTRAL
             return value
+
+
 

@@ -15,6 +15,10 @@
 define config.name = _("drone-daddy-2")
 
 
+# FOR FINAL RELEASE REMOVE THIS
+define config.developer = True
+
+
 ## Determines if the title given above is shown on the main menu screen. Set
 ## this to False to hide the title.
 
